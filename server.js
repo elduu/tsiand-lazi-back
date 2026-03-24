@@ -12,7 +12,7 @@ const fetch = require("node-fetch"); // ensure you have node-fetch installed
 // Config
 // =========================
 const BOT_TOKEN = process.env.BOT_TOKEN || '8496563288:AAFilcA-eA5Ge5JQzILRMSu2NNJQ5BiZNTQ';
-const PORT = process.env.PORT || 5000;
+const PORT = 5000;
 
 // MySQL Pool
 const pool = mysql.createPool({
