@@ -153,21 +153,17 @@ app.get("/rsvp", async (req, res) => {
 app.use("/uploads", express.static(uploadsDir));
 
 // GET wedding photos
-// 
 app.get("/api/wedding-photos", async (req, res) => {
   try {
     const [rows] = await pool.execute(
       "SELECT file_path, sender, timestamp FROM wedding_photos ORDER BY timestamp DESC"
     );
 
-    // If behind HTTPS proxy, force https
-    const protocol = req.headers["x-forwarded-proto"] || req.protocol; 
-    const host = req.get("host");
+    const baseUrl = `https://${req.get("host")}`;
 
-    const baseUrl = `${protocol}://${host}`;
 
     const photos = rows.map(row => ({
-      url: `${baseUrl}${row.file_path}`, // row.file_path starts with /uploads/
+      url: `${baseUrl}${row.file_path}`,
       sender: row.sender,
       timestamp: row.timestamp
     }));
@@ -177,6 +173,7 @@ app.get("/api/wedding-photos", async (req, res) => {
     console.error("DB Error fetching photos:", err);
     res.status(500).json({ error: "Failed to load photos" });
   }
+
 });
 // =========================
 // Telegram Bot
